@@ -2,6 +2,7 @@ export type RiskLevel = "Low" | "Medium" | "High";
 export type Horizon = "current" | "7d" | "14d" | "30d";
 
 export type PageKey =
+  | "home"
   | "dashboard"
   | "location"
   | "prediction"

@@ -1,12 +1,16 @@
 import { useEffect, useRef, useState } from "react";
-import { Bell, ChevronRight, Menu } from "lucide-react";
+import { Bell, ChevronRight, LogOut, Menu } from "lucide-react";
 import { useApp } from "../../context/AppContext";
 import type { PageKey } from "../../types";
 import { LEVEL_COLORS } from "../../data/mockData";
 
 export const PAGE_META: Record<PageKey, { title: string; subtitle: string }> = {
+  home: {
+    title: "Home",
+    subtitle: "Monitor pest risk, review forecasts, and identify areas that need attention",
+  },
   dashboard: {
-    title: "Dashboard",
+    title: "Risk Analysis",
     subtitle: "Location-specific pest risk intelligence and early warning",
   },
   location: {
@@ -35,7 +39,7 @@ export const PAGE_META: Record<PageKey, { title: string; subtitle: string }> = {
   },
   settings: {
     title: "Settings",
-    subtitle: "Thresholds, notifications and model preferences",
+    subtitle: "Thresholds, notifications and display preferences",
   },
 };
 
@@ -145,6 +149,60 @@ function NotificationBell() {
   );
 }
 
+function ProfileMenu() {
+  const { officer, logout } = useApp();
+  const [open, setOpen] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+  const initials = officer.name
+    .split(" ")
+    .map((w) => w[0])
+    .join("")
+    .slice(0, 2)
+    .toUpperCase();
+
+  useEffect(() => {
+    if (!open) return;
+    const close = (e: MouseEvent) => {
+      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
+    };
+    document.addEventListener("mousedown", close);
+    return () => document.removeEventListener("mousedown", close);
+  }, [open]);
+
+  return (
+    <div className="relative border-l border-line pl-3" ref={ref}>
+      <button
+        onClick={() => setOpen((o) => !o)}
+        className="flex items-center gap-2.5 rounded-lg py-1 pr-1 transition-colors hover:bg-paper"
+      >
+        <div className="flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br from-forest-600 to-forest-800 text-[11.5px] font-bold text-emerald-50 ring-2 ring-white">
+          {initials}
+        </div>
+        <div className="hidden leading-tight sm:block">
+          <p className="text-[12.5px] font-semibold text-ink">{officer.name}</p>
+          <p className="text-[10.5px] text-faint">{officer.role}</p>
+        </div>
+      </button>
+
+      {open && (
+        <div className="absolute right-0 top-12 z-50 w-[220px] overflow-hidden rounded-xl border border-line bg-white shadow-pop">
+          <div className="border-b border-line-soft px-4 py-3">
+            <p className="text-[12.5px] font-semibold text-ink">{officer.name}</p>
+            <p className="mt-0.5 text-[11px] text-faint">{officer.role}</p>
+          </div>
+          <button
+            onClick={logout}
+            className="flex w-full items-center gap-2 px-4 py-2.5 text-left text-[12.5px] font-medium text-high transition-colors hover:bg-high-soft"
+          >
+            <LogOut className="h-3.5 w-3.5" />
+            Log out
+          </button>
+        </div>
+      )}
+    </div>
+  );
+}
+
 export default function Header() {
   const { page, setMobileNavOpen } = useApp();
   const meta = PAGE_META[page];
@@ -171,16 +229,7 @@ export default function Header() {
 
         <Clock />
         <NotificationBell />
-
-        <div className="flex items-center gap-2.5 border-l border-line pl-3">
-          <div className="flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br from-forest-600 to-forest-800 text-[11.5px] font-bold text-emerald-50 ring-2 ring-white">
-            AN
-          </div>
-          <div className="hidden leading-tight sm:block">
-            <p className="text-[12.5px] font-semibold text-ink">A. Nayak</p>
-            <p className="text-[10.5px] text-faint">Agricultural Officer</p>
-          </div>
-        </div>
+        <ProfileMenu />
       </div>
     </header>
   );

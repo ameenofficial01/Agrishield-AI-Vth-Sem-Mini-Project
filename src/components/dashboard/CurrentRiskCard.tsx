@@ -1,5 +1,6 @@
-import { ArrowRight, MapPin, Wheat } from "lucide-react";
+import { ArrowRight, MapPin } from "lucide-react";
 import { Card, RiskBadge } from "../ui";
+import { CropThumb, PestThumb } from "../common/CropPestThumb";
 import Gauge from "../Gauge";
 import { useApp } from "../../context/AppContext";
 import { PEST_META } from "../../data/cropPestMap";
@@ -15,25 +16,29 @@ export default function CurrentRiskCard() {
       className="flex h-full flex-col"
       bodyClassName="flex flex-1 flex-col"
     >
-      <div className="flex items-center justify-between gap-2">
-        <div className="min-w-0">
-          <p className="truncate text-[15px] font-bold tracking-tight text-ink">
-            {analysis.selection.pest}
-          </p>
-          {meta && (
-            <p className="truncate text-[10.5px] italic text-faint">
-              {meta.scientific} · {meta.group}
+      <div className="flex items-start justify-between gap-2">
+        <div className="flex min-w-0 items-center gap-2.5">
+          <PestThumb pest={analysis.selection.pest} size="sm" />
+          <div className="min-w-0">
+            <p className="truncate text-[15px] font-bold tracking-tight text-ink">
+              {analysis.selection.pest}
             </p>
-          )}
+            {meta && (
+              <p className="truncate text-[10.5px] italic text-faint">
+                {meta.scientific} · {meta.group}
+              </p>
+            )}
+          </div>
         </div>
-        <span className="rounded-md bg-paper px-2 py-1 text-[10px] font-bold uppercase tracking-wide text-subtle ring-1 ring-line">
+        <span className="mt-0.5 shrink-0 rounded-md bg-paper px-2 py-1 text-[10px] font-bold uppercase tracking-wide text-subtle ring-1 ring-line">
           Prototype
         </span>
       </div>
 
-      <div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1 text-[11px] font-medium text-subtle">
+      <div className="mt-2.5 flex flex-wrap items-center gap-x-4 gap-y-1.5 text-[11px] font-medium text-subtle">
         <span className="flex items-center gap-1.5">
-          <Wheat className="h-3 w-3 text-faint" /> {analysis.selection.crop}
+          <CropThumb crop={analysis.selection.crop} size="sm" className="h-5 w-5" />
+          {analysis.selection.crop}
         </span>
         <span className="flex items-center gap-1.5">
           <MapPin className="h-3 w-3 text-faint" /> {analysis.selection.district}, {analysis.selection.state}

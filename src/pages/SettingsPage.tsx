@@ -108,7 +108,7 @@ export default function SettingsPage() {
           <Field label="Basemap style" value={basemap} onChange={setBasemap} options={["Minimal (light)", "Satellite", "Terrain"]} />
           <div className="flex items-start gap-2.5 rounded-lg bg-paper/80 p-3 text-[11px] leading-relaxed text-faint">
             <MapIcon className="mt-0.5 h-4 w-4 shrink-0 text-subtle" />
-            Map preferences apply across the Dashboard, Risk Map and Location Selection pages.
+            Map preferences apply across the Risk Analysis, Risk Map and Home pages.
           </div>
         </div>
       </Card>
@@ -117,11 +117,11 @@ export default function SettingsPage() {
       <Card title="Profile & Jurisdiction" subtitle="Displayed on bulletins and shared advisories" className="anim-in anim-in-d3 lg:col-span-2">
         <div className="mb-4 flex items-center gap-3">
           <div className="flex h-11 w-11 items-center justify-center rounded-full bg-gradient-to-br from-forest-600 to-forest-800 text-[13px] font-bold text-emerald-50">
-            AN
+            AO
           </div>
           <div>
-            <p className="text-[13px] font-semibold text-ink">Dr. Ananya Nayak</p>
-            <p className="text-[11px] text-faint">Agricultural Officer · Pest Surveillance Cell</p>
+            <p className="text-[13px] font-semibold text-ink">Agricultural Officer</p>
+            <p className="text-[11px] text-faint">District Agriculture Office · Pest Surveillance Cell</p>
           </div>
         </div>
         <div className="grid grid-cols-1 gap-3.5 sm:grid-cols-2">

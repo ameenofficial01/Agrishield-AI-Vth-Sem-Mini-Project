@@ -1,6 +1,8 @@
 import { AppProvider, useApp } from "./context/AppContext";
 import Sidebar from "./components/layout/Sidebar";
 import Header from "./components/layout/Header";
+import LoginPage from "./pages/LoginPage";
+import HomePage from "./pages/HomePage";
 import DashboardPage from "./pages/DashboardPage";
 import LocationSelectionPage from "./pages/LocationSelectionPage";
 import RiskPredictionPage from "./pages/RiskPredictionPage";
@@ -31,6 +33,7 @@ function Shell() {
 
         <main className="mx-auto max-w-[1480px] p-4 sm:p-6">
           <div key={page} className="anim-in">
+            {page === "home" && <HomePage />}
             {page === "dashboard" && <DashboardPage />}
             {page === "location" && <LocationSelectionPage />}
             {page === "prediction" && <RiskPredictionPage />}
@@ -58,10 +61,15 @@ function Shell() {
   );
 }
 
+function Root() {
+  const { isAuthenticated } = useApp();
+  return isAuthenticated ? <Shell /> : <LoginPage />;
+}
+
 export default function App() {
   return (
     <AppProvider>
-      <Shell />
+      <Root />
     </AppProvider>
   );
 }

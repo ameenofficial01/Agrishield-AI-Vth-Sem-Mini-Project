@@ -2,10 +2,10 @@ import {
   BellRing,
   BrainCircuit,
   CalendarClock,
+  Home,
   LayoutDashboard,
+  LogOut,
   Map as MapIcon,
-  MapPinned,
-  Radar,
   Settings,
   Sprout,
   X,
@@ -14,13 +14,12 @@ import type { PageKey } from "../../types";
 import { useApp } from "../../context/AppContext";
 
 const NAV: { key: PageKey; label: string; icon: React.ElementType }[] = [
-  { key: "dashboard", label: "Dashboard", icon: LayoutDashboard },
-  { key: "location", label: "Location Selection", icon: MapPinned },
-  { key: "prediction", label: "Risk Prediction", icon: Radar },
+  { key: "home", label: "Home", icon: Home },
+  { key: "dashboard", label: "Risk Analysis", icon: LayoutDashboard },
   { key: "forecast", label: "Forecast", icon: CalendarClock },
-  { key: "xai", label: "Explainable AI", icon: BrainCircuit },
   { key: "map", label: "Risk Map", icon: MapIcon },
   { key: "alerts", label: "Alerts", icon: BellRing },
+  { key: "xai", label: "Explainable AI", icon: BrainCircuit },
   { key: "settings", label: "Settings", icon: Settings },
 ];
 
@@ -115,6 +114,31 @@ function ModelStatus({ compact }: { compact?: boolean }) {
   );
 }
 
+function LogoutButton({ compact }: { compact?: boolean }) {
+  const { logout, officer } = useApp();
+
+  if (compact) {
+    return (
+      <button
+        onClick={logout}
+        title={`Log out (${officer.name})`}
+        className="mt-3 flex w-full items-center justify-center rounded-lg py-2 text-white/45 transition-colors hover:bg-white/[0.06] hover:text-white/85"
+      >
+        <LogOut className="h-4 w-4" strokeWidth={1.9} />
+      </button>
+    );
+  }
+  return (
+    <button
+      onClick={logout}
+      className="mt-3 flex w-full items-center gap-2.5 rounded-lg px-3 py-2 text-left text-[12.5px] font-medium text-white/55 transition-colors hover:bg-white/[0.06] hover:text-white/90"
+    >
+      <LogOut className="h-4 w-4" strokeWidth={1.9} />
+      Log out
+    </button>
+  );
+}
+
 export default function Sidebar() {
   const { mobileNavOpen, setMobileNavOpen } = useApp();
 
@@ -140,9 +164,11 @@ export default function Sidebar() {
           <div className="mt-auto pt-6">
             <div className="xl:hidden">
               <ModelStatus compact />
+              <LogoutButton compact />
             </div>
             <div className="hidden xl:block">
               <ModelStatus />
+              <LogoutButton />
               <p className="mt-3 px-1 text-center text-[9.5px] leading-relaxed text-white/30">
                 Early Warning System · Karnataka & Kerala
                 <br />
@@ -183,6 +209,7 @@ export default function Sidebar() {
             <NavItems />
             <div className="mt-auto pt-6">
               <ModelStatus />
+              <LogoutButton />
             </div>
           </div>
         </aside>
