@@ -8,6 +8,18 @@ import RecommendedActions from "../components/dashboard/RecommendedActions";
 import { useApp } from "../context/AppContext";
 
 export default function DashboardPage() {
+  const [summary, setSummary] = useState({
+    total_predictions: 0,
+    high_risk_predictions: 0,
+    active_alerts: 0
+  });
+  const [history, setHistory] = useState<any[]>([]);
+
+  useEffect(() => {
+    fetchAPI("/dashboard/summary").then(setSummary).catch(console.error);
+    fetchAPI("/predictions").then(setHistory).catch(console.error);
+  }, []);
+
   const { analysis } = useApp();
 
   return (

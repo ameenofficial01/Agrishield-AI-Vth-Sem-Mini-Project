@@ -1,0 +1,20 @@
+{
+    "metrics": {
+        "MAE": 7.041397907942459,
+        "RMSE": 8.679808328629973,
+        "R2": 0.5437212416810395
+    },
+    "features": [
+        "State",
+        "District",
+        "Taluk",
+        "Crop",
+        "Pest",
+        "Temperature_C",
+        "Humidity_Pct",
+        "Rainfall_7d_mm",
+        "Wind_kmh"
+    ],
+    "target": "Risk_Score",
+    "version": "1.0.1"
+}
