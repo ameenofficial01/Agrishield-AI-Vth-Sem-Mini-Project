@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import AnalysisFilters from "../components/dashboard/AnalysisFilters";
 import KpiRow from "../components/dashboard/KpiRow";
 import RiskMapCard from "../components/dashboard/RiskMapCard";
@@ -6,6 +7,7 @@ import ForecastChartCard from "../components/dashboard/ForecastChartCard";
 import ExplainabilityPanel from "../components/dashboard/ExplainabilityPanel";
 import RecommendedActions from "../components/dashboard/RecommendedActions";
 import { useApp } from "../context/AppContext";
+import { fetchAPI } from "../utils/api";
 
 export default function DashboardPage() {
   const [summary, setSummary] = useState({
