@@ -37,3 +37,11 @@ coverage/
 
 # Local cache
 .cache/
+
+# Databases & Python cache
+*.db
+*.sqlite*
+__pycache__/
+*.pyc
+venv/
+
