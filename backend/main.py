@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.database import engine, Base
-from app.routes import auth, locations, weather, predictions, alerts, dashboard, admin, model_info
+from app.routes import auth, locations, weather, predictions, alerts, dashboard, admin, model_info, images
 import app.models
 
 Base.metadata.create_all(bind=engine)
@@ -24,6 +24,7 @@ app.include_router(alerts.router)
 app.include_router(dashboard.router)
 app.include_router(admin.router)
 app.include_router(model_info.router)
+app.include_router(images.router)
 
 @app.get("/")
 def read_root():

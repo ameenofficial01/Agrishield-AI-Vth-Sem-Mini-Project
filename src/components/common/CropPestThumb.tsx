@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FALLBACK_IMAGE, getCropImage, getPestImage } from "../../data/images";
+import { fetchAPI } from "../../utils/api";
 
 export function CropThumb({
   crop,
@@ -11,6 +12,26 @@ export function CropThumb({
   className?: string;
 }) {
   const [imgSrc, setImgSrc] = useState(getCropImage(crop));
+
+  useEffect(() => {
+    setImgSrc(getCropImage(crop));
+
+    const cached = sessionStorage.getItem(`crop_img_${crop}`);
+    if (cached) {
+      setImgSrc(cached);
+      return;
+    }
+
+    // Live search dynamically when user selects crop
+    fetchAPI(`/images/search?query=${encodeURIComponent(crop)}`)
+      .then((res) => {
+        if (res?.url) {
+          sessionStorage.setItem(`crop_img_${crop}`, res.url);
+          setImgSrc(res.url);
+        }
+      })
+      .catch(() => {});
+  }, [crop]);
 
   const dim =
     size === "sm"
@@ -45,6 +66,26 @@ export function PestThumb({
 }) {
   const [imgSrc, setImgSrc] = useState(getPestImage(pest));
 
+  useEffect(() => {
+    setImgSrc(getPestImage(pest));
+
+    const cached = sessionStorage.getItem(`pest_img_${pest}`);
+    if (cached) {
+      setImgSrc(cached);
+      return;
+    }
+
+    // Live search dynamically when user selects pest
+    fetchAPI(`/images/search?query=${encodeURIComponent(pest)}`)
+      .then((res) => {
+        if (res?.url) {
+          sessionStorage.setItem(`pest_img_${pest}`, res.url);
+          setImgSrc(res.url);
+        }
+      })
+      .catch(() => {});
+  }, [pest]);
+
   const dim =
     size === "sm"
       ? "h-8 w-8"
@@ -62,7 +103,7 @@ export function PestThumb({
       crossOrigin="anonymous"
       onError={() =>
         setImgSrc(
-          "https://images.unsplash.com/photo-1588252303782-cb80119abd6d?auto=format&fit=crop&w=400&q=80"
+          "https://upload.wikimedia.org/wikipedia/commons/thumb/3/30/Aphid_on_leaf.jpg/640px-Aphid_on_leaf.jpg"
         )
       }
       className={`${dim} shrink-0 rounded-xl border border-line bg-white object-cover shadow-sm transition-transform duration-200 hover:scale-105 ${className}`}
