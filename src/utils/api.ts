@@ -3,16 +3,19 @@ export const API_URL = import.meta.env.VITE_API_URL || "http://localhost:8000/ap
 export async function fetchAPI(endpoint: string, options: RequestInit = {}) {
   const token = localStorage.getItem("agroshield.token");
   
-  const headers: HeadersInit = {
-    ...options.headers,
+  const headers: Record<string, string> = {
+    ...((options.headers as Record<string, string>) || {}),
   };
 
   if (token) {
     headers["Authorization"] = `Bearer ${token}`;
   }
 
-  // Only set Content-Type to application/json if not FormData
-  if (!(options.body instanceof FormData)) {
+  // Do not overwrite Content-Type if already explicitly set or if body is FormData
+  const hasContentType = Object.keys(headers).some(
+    (k) => k.toLowerCase() === "content-type"
+  );
+  if (!(options.body instanceof FormData) && !hasContentType) {
     headers["Content-Type"] = "application/json";
   }
 
@@ -23,7 +26,15 @@ export async function fetchAPI(endpoint: string, options: RequestInit = {}) {
 
   if (!response.ok) {
     const errorData = await response.json().catch(() => ({}));
-    throw new Error(errorData.detail || "API request failed");
+    let msg = "API request failed";
+    if (typeof errorData.detail === "string") {
+      msg = errorData.detail;
+    } else if (Array.isArray(errorData.detail)) {
+      msg = errorData.detail
+        .map((e: any) => e.msg || JSON.stringify(e))
+        .join(", ");
+    }
+    throw new Error(msg);
   }
 
   return response.json();
