@@ -1,4 +1,4 @@
-import { ArrowRight, MapPin } from "lucide-react";
+import { ArrowRight, MapPin, Sparkles } from "lucide-react";
 import { Card, RiskBadge } from "../ui";
 import { CropThumb, PestThumb } from "../common/CropPestThumb";
 import Gauge from "../Gauge";
@@ -12,40 +12,61 @@ export default function CurrentRiskCard() {
   return (
     <Card
       title="Current Pest Risk"
-      subtitle="Prediction prototype · demonstration data"
+      subtitle="AI-driven diagnostic profile · Karnataka & Kerala"
       className="flex h-full flex-col"
       bodyClassName="flex flex-1 flex-col"
     >
-      <div className="flex items-start justify-between gap-2">
-        <div className="flex min-w-0 items-center gap-2.5">
-          <PestThumb pest={analysis.selection.pest} size="sm" />
-          <div className="min-w-0">
-            <p className="truncate text-[15px] font-bold tracking-tight text-ink">
-              {analysis.selection.pest}
-            </p>
-            {meta && (
-              <p className="truncate text-[10.5px] italic text-faint">
-                {meta.scientific} · {meta.group}
+      {/* Prominent Pest & Crop Visual Display */}
+      <div className="grid grid-cols-2 gap-3 rounded-xl border border-line bg-paper/60 p-3">
+        {/* Pest Card */}
+        <div className="flex flex-col gap-2 rounded-lg border border-line-soft bg-white p-2.5 shadow-sm">
+          <div className="flex items-center justify-between">
+            <span className="text-[10px] font-bold uppercase tracking-wider text-rose-600">
+              Target Pest
+            </span>
+            <span className="rounded bg-rose-50 px-1.5 py-0.5 text-[9px] font-semibold text-rose-700">
+              Insect
+            </span>
+          </div>
+          <div className="flex items-center gap-2.5">
+            <PestThumb pest={analysis.selection.pest} size="md" className="h-14 w-14 rounded-lg object-cover" />
+            <div className="min-w-0 flex-1">
+              <p className="truncate text-[13.5px] font-bold text-ink">
+                {analysis.selection.pest}
               </p>
-            )}
+              <p className="truncate text-[10.5px] italic text-faint">
+                {meta?.scientific || "Identified Specimen"}
+              </p>
+            </div>
           </div>
         </div>
-        <span className="mt-0.5 shrink-0 rounded-md bg-paper px-2 py-1 text-[10px] font-bold uppercase tracking-wide text-subtle ring-1 ring-line">
-          Prototype
-        </span>
+
+        {/* Crop Card */}
+        <div className="flex flex-col gap-2 rounded-lg border border-line-soft bg-white p-2.5 shadow-sm">
+          <div className="flex items-center justify-between">
+            <span className="text-[10px] font-bold uppercase tracking-wider text-forest-700">
+              Host Crop
+            </span>
+            <span className="rounded bg-forest-50 px-1.5 py-0.5 text-[9px] font-semibold text-forest-700">
+              Host
+            </span>
+          </div>
+          <div className="flex items-center gap-2.5">
+            <CropThumb crop={analysis.selection.crop} size="md" className="h-14 w-14 rounded-lg object-cover" />
+            <div className="min-w-0 flex-1">
+              <p className="truncate text-[13.5px] font-bold text-ink">
+                {analysis.selection.crop}
+              </p>
+              <p className="flex items-center gap-1 truncate text-[10.5px] text-faint">
+                <MapPin className="h-3 w-3 shrink-0 text-faint" />
+                {analysis.selection.district}
+              </p>
+            </div>
+          </div>
+        </div>
       </div>
 
-      <div className="mt-2.5 flex flex-wrap items-center gap-x-4 gap-y-1.5 text-[11px] font-medium text-subtle">
-        <span className="flex items-center gap-1.5">
-          <CropThumb crop={analysis.selection.crop} size="sm" className="h-5 w-5" />
-          {analysis.selection.crop}
-        </span>
-        <span className="flex items-center gap-1.5">
-          <MapPin className="h-3 w-3 text-faint" /> {analysis.selection.district}, {analysis.selection.state}
-        </span>
-      </div>
-
-      <div className="mt-1">
+      <div className="mt-2">
         <Gauge value={analysis.base} level={analysis.level} />
         <div className="-mt-0.5 flex justify-center">
           <RiskBadge level={analysis.level} />

@@ -1,26 +1,34 @@
-import { getCropImage, getPestImage } from "../../data/images";
+import { useState } from "react";
+import { FALLBACK_IMAGE, getCropImage, getPestImage } from "../../data/images";
 
-/**
- * Compact identification thumbnail for a crop or pest. Centralizing this
- * here (rather than scattering <img> + path logic across pages) means the
- * image source can later switch to a backend-provided `imageUrl` field
- * without touching any page component.
- */
 export function CropThumb({
   crop,
   size = "md",
   className = "",
 }: {
   crop: string;
-  size?: "sm" | "md" | "lg";
+  size?: "sm" | "md" | "lg" | "xl";
   className?: string;
 }) {
-  const dim = size === "sm" ? "h-8 w-8" : size === "lg" ? "h-16 w-16" : "h-11 w-11";
+  const [imgSrc, setImgSrc] = useState(getCropImage(crop));
+
+  const dim =
+    size === "sm"
+      ? "h-8 w-8"
+      : size === "md"
+      ? "h-12 w-12"
+      : size === "lg"
+      ? "h-16 w-16"
+      : "h-24 w-24";
+
   return (
     <img
-      src={getCropImage(crop)}
+      src={imgSrc}
       alt={crop}
-      className={`${dim} shrink-0 rounded-full border border-line bg-white object-cover ${className}`}
+      referrerPolicy="no-referrer"
+      crossOrigin="anonymous"
+      onError={() => setImgSrc(FALLBACK_IMAGE)}
+      className={`${dim} shrink-0 rounded-xl border border-line bg-white object-cover shadow-sm transition-transform duration-200 hover:scale-105 ${className}`}
       loading="lazy"
     />
   );
@@ -32,15 +40,32 @@ export function PestThumb({
   className = "",
 }: {
   pest: string;
-  size?: "sm" | "md" | "lg";
+  size?: "sm" | "md" | "lg" | "xl";
   className?: string;
 }) {
-  const dim = size === "sm" ? "h-8 w-8" : size === "lg" ? "h-16 w-16" : "h-11 w-11";
+  const [imgSrc, setImgSrc] = useState(getPestImage(pest));
+
+  const dim =
+    size === "sm"
+      ? "h-8 w-8"
+      : size === "md"
+      ? "h-12 w-12"
+      : size === "lg"
+      ? "h-16 w-16"
+      : "h-24 w-24";
+
   return (
     <img
-      src={getPestImage(pest)}
+      src={imgSrc}
       alt={pest}
-      className={`${dim} shrink-0 rounded-full border border-line bg-white object-cover ${className}`}
+      referrerPolicy="no-referrer"
+      crossOrigin="anonymous"
+      onError={() =>
+        setImgSrc(
+          "https://images.unsplash.com/photo-1588252303782-cb80119abd6d?auto=format&fit=crop&w=400&q=80"
+        )
+      }
+      className={`${dim} shrink-0 rounded-xl border border-line bg-white object-cover shadow-sm transition-transform duration-200 hover:scale-105 ${className}`}
       loading="lazy"
     />
   );
